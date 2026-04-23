@@ -4,13 +4,43 @@
   color-scheme: dark;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
+  background-color: #000319;
+  color: #e2e8f0;
+  min-height: 100vh;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
   background:
-    radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.12), transparent 35%),
-    radial-gradient(circle at 90% 0%, rgba(168, 85, 247, 0.12), transparent 45%),
-    #05070f;
+    radial-gradient(circle at 20% 10%, rgba(107, 33, 168, 0.25), transparent 32%),
+    radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.15), transparent 36%),
+    linear-gradient(rgba(99, 102, 241, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.08) 1px, transparent 1px);
+  background-size:
+    auto,
+    auto,
+    48px 48px,
+    48px 48px;
+  z-index: -1;
 }
 
 section {
   scroll-margin-top: 6rem;
+}
+
+.cyber-surface {
+  background: linear-gradient(150deg, rgba(4, 7, 29, 0.9), rgba(12, 14, 35, 0.88));
+  border: 1px solid #363749;
+}
+
+.glow-button {
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.35);
 }

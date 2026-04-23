@@ -1,104 +1,81 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Download, Mail } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 
-const roles = [
-  "Flutter Developer",
-  "Backend Developer",
-  "Penetration Testing Trainee",
-];
+const identity = {
+  name: "Abdallah Sultan",
+  location: "Cairo, Egypt",
+  titles: "Flutter Developer | Backend Developer | Cybersecurity Analyst",
+  imageUrl: "https://github.com/user-attachments/assets/8d7b0535-a1bc-487a-b1bf-53d8fbf62644",
+};
 
 export default function Hero() {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [typedRole, setTypedRole] = useState("");
-
-  useEffect(() => {
-    const fullRole = roles[roleIndex];
-    let currentIndex = 0;
-    let roleChangeTimeout: ReturnType<typeof setTimeout> | undefined;
-
-    const typingInterval = setInterval(() => {
-      currentIndex += 1;
-      setTypedRole(fullRole.slice(0, currentIndex));
-
-      if (currentIndex === fullRole.length) {
-        clearInterval(typingInterval);
-        roleChangeTimeout = setTimeout(() => {
-          setTypedRole("");
-          setRoleIndex((previousIndex) => (previousIndex + 1) % roles.length);
-        }, 1000);
-      }
-    }, 80);
-
-    return () => {
-      clearInterval(typingInterval);
-      if (roleChangeTimeout) {
-        clearTimeout(roleChangeTimeout);
-      }
-    };
-  }, [roleIndex]);
-
   return (
-    <section className="rounded-3xl border border-cyan-900/40 bg-slate-950/70 p-6 shadow-2xl shadow-cyan-900/20 sm:p-10">
-      <motion.p
-        initial={false}
-        animate={{ opacity: 1, y: 0 }}
+    <section className="cyber-surface relative overflow-hidden rounded-3xl px-6 py-14 text-center sm:px-12">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(203,172,249,0.2),transparent_62%)]" />
+      <motion.div
+        className="relative z-10 mx-auto h-24 w-24 overflow-hidden rounded-full border border-violet-300/60 shadow-[0_0_32px_rgba(203,172,249,0.38)]"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="text-sm font-medium uppercase tracking-[0.25em] text-cyan-400"
       >
-        Abdallah Sultan · Cairo, Egypt
+        <Image
+          src={identity.imageUrl}
+          alt="Abdallah Sultan"
+          width={96}
+          height={96}
+          className="h-24 w-24 object-cover"
+          priority
+        />
+      </motion.div>
+
+      <motion.p
+        className="relative z-10 mt-5 text-xs font-medium uppercase tracking-[0.3em] text-cyan-300"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, delay: 0.1 }}
+      >
+        {identity.name} · {identity.location}
       </motion.p>
 
       <motion.h1
-        initial={false}
+        className="relative z-10 mx-auto mt-5 max-w-3xl text-3xl font-extrabold leading-tight text-white sm:text-5xl"
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="mt-4 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl"
+        transition={{ duration: 0.55, delay: 0.15 }}
       >
-        Building modern software and secure digital experiences.
+        Ready to take your digital presence to the next level?
       </motion.h1>
 
       <motion.p
-        initial={false}
+        className="relative z-10 mx-auto mt-5 max-w-2xl text-base text-slate-300 sm:text-lg"
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="mt-5 text-lg text-slate-300"
+        transition={{ duration: 0.55, delay: 0.2 }}
       >
-        I&apos;m a{" "}
-        <span className="font-semibold text-cyan-300">
-          {typedRole}
-          <span className="ml-0.5 inline-block h-5 w-0.5 animate-pulse bg-cyan-300 align-middle" />
-        </span>
+        I craft robust mobile and web solutions with a security-first mindset,
+        combining modern engineering with practical cybersecurity insight.
       </motion.p>
 
-      <motion.div
-        initial={false}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="mt-8 flex flex-wrap gap-3"
+      <motion.p
+        className="relative z-10 mt-5 text-sm text-violet-200"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.55, delay: 0.25 }}
       >
-        <a
-          href="#projects"
-          className="inline-flex items-center gap-2 rounded-xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
-        >
-          View Projects <ArrowRight size={16} />
-        </a>
-        <a
-          href="/cv-abdallah-sultan.pdf"
-          download
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-400 hover:text-cyan-300"
-        >
-          Download CV <Download size={16} />
-        </a>
-        <a
-          href="#contact"
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-400 hover:text-cyan-300"
-        >
-          Contact Me <Mail size={16} />
-        </a>
-      </motion.div>
+        {identity.titles}
+      </motion.p>
+
+      <motion.a
+        href="mailto:abdallahsultan792@gmail.com"
+        className="glow-button relative z-10 mt-8 inline-flex items-center gap-2 rounded-full border border-violet-300/60 bg-gradient-to-r from-violet-500/25 to-cyan-400/20 px-7 py-3 text-sm font-semibold text-white transition hover:scale-[1.02]"
+        whileHover={{ y: -2 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        Contact Me Now <ArrowUpRight size={16} />
+      </motion.a>
     </section>
   );
 }
