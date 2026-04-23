@@ -17,7 +17,7 @@ export default function Hero() {
   useEffect(() => {
     const fullRole = roles[roleIndex];
     let currentIndex = 0;
-    let nextRoleTimeout: ReturnType<typeof setTimeout> | undefined;
+    let roleChangeTimeout: ReturnType<typeof setTimeout> | undefined;
 
     const typingInterval = setInterval(() => {
       currentIndex += 1;
@@ -25,7 +25,7 @@ export default function Hero() {
 
       if (currentIndex === fullRole.length) {
         clearInterval(typingInterval);
-        nextRoleTimeout = setTimeout(() => {
+        roleChangeTimeout = setTimeout(() => {
           setTypedRole("");
           setRoleIndex((previousIndex) => (previousIndex + 1) % roles.length);
         }, 1000);
@@ -34,8 +34,8 @@ export default function Hero() {
 
     return () => {
       clearInterval(typingInterval);
-      if (nextRoleTimeout) {
-        clearTimeout(nextRoleTimeout);
+      if (roleChangeTimeout) {
+        clearTimeout(roleChangeTimeout);
       }
     };
   }, [roleIndex]);

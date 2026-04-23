@@ -1,5 +1,6 @@
 "use client";
 
+import type { FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Globe, Mail, Phone, UserRound } from "lucide-react";
 import SectionTitle from "./SectionTitle";
@@ -32,6 +33,18 @@ const contacts = [
 ];
 
 export default function Contact() {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const name = String(formData.get("name") ?? "").trim();
+    const email = String(formData.get("email") ?? "").trim();
+    const message = String(formData.get("message") ?? "").trim();
+
+    const subject = encodeURIComponent(`Portfolio Contact from ${name || "Visitor"}`);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+    window.location.href = `mailto:abdallahsultan792@gmail.com?subject=${subject}&body=${body}`;
+  };
+
   return (
     <motion.section
       id="contact"
@@ -43,7 +56,7 @@ export default function Contact() {
     >
       <SectionTitle title="Contact" subtitle="Let&apos;s Connect" />
       <div className="grid gap-8 lg:grid-cols-2">
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
             name="name"
