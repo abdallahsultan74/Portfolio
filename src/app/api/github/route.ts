@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { GithubRepo } from "@/lib/github";
 
-export const revalidate = 60 * 60 * 6; // 6 hours
+export const revalidate = 21600; // 6 hours
 
 const OWNER = "abdallahsultan74";
 const TARGET_REPOS = [
