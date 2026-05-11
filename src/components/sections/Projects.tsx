@@ -10,6 +10,13 @@ import type { GithubRepo } from "@/lib/github";
 import { cn } from "@/lib/utils";
 import { inView, reveal, stagger } from "@/components/ui/motion";
 
+const OWNER = "abdallahsultan74";
+const TARGET_REPOS = projects.map((project) => project.repoName);
+const githubHeaders = {
+  Accept: "application/vnd.github+json",
+  "X-GitHub-Api-Version": "2022-11-28",
+};
+
 type ProjectCard = {
   repoName: string;
   title: string;
@@ -34,6 +41,17 @@ function fmtDate(iso?: string) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return undefined;
   return d.toLocaleDateString(undefined, { year: "numeric", month: "short" });
+}
+
+type ReadmeResult = { ok: boolean; contentBase64?: string };
+type ReadmeResponse = { content: string; encoding: "base64" };
+
+async function fetchJson<T>(url: string): Promise<
+  { ok: true; data: T } | { ok: false; status: number }
+> {
+  const res = await fetch(url, { headers: githubHeaders });
+  if (!res.ok) return { ok: false, status: res.status };
+  return { ok: true, data: (await res.json()) as T };
 }
 
 function safeAtobBase64(b64: string) {
@@ -70,19 +88,36 @@ function buildSummaryFromReadme(readmeText: string, fallback: string) {
 export function Projects() {
   const [repos, setRepos] = useState<GithubRepo[] | null>(null);
   const [readmes, setReadmes] = useState<
-    Record<string, { ok: boolean; contentBase64?: string }> | null
+    Record<string, ReadmeResult> | null
   >(null);
 
   useEffect(() => {
     let mounted = true;
-    fetch("/api/github")
-      .then((r) => r.json())
-      .then((json) => {
-        if (!mounted) return;
-        if (json?.ok && Array.isArray(json.repos)) setRepos(json.repos);
-        if (json?.ok && json.readmes) setReadmes(json.readmes);
-      })
-      .catch(() => {});
+    const load = async () => {
+      const reposUrl = `https://api.github.com/users/${OWNER}/repos?per_page=100&sort=updated`;
+      const reposPromise = fetchJson<GithubRepo[]>(reposUrl);
+      const readmesPromise = Promise.all(
+        TARGET_REPOS.map(async (name) => {
+          const readmeUrl = `https://api.github.com/repos/${OWNER}/${name}/readme`;
+          const r = await fetchJson<ReadmeResponse>(readmeUrl);
+          if (!r.ok) return [name, { ok: false }] as const;
+          return [name, { ok: true, contentBase64: r.data.content }] as const;
+        })
+      );
+
+      const [reposRes, readmeEntries] = await Promise.all([
+        reposPromise,
+        readmesPromise,
+      ]);
+
+      if (!mounted) return;
+      if (reposRes.ok && Array.isArray(reposRes.data)) {
+        setRepos(reposRes.data);
+      }
+      setReadmes(Object.fromEntries(readmeEntries));
+    };
+
+    void load().catch(() => {});
     return () => {
       mounted = false;
     };
@@ -270,4 +305,3 @@ export function Projects() {
     </section>
   );
 }
-

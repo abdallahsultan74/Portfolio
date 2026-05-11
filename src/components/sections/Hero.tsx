@@ -8,6 +8,8 @@ import { GlowButton } from "@/components/ui/Button";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { reveal, stagger } from "@/components/ui/motion";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export function Hero() {
   return (
     <section className="relative overflow-hidden">
@@ -84,7 +86,7 @@ export function Hero() {
                 <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(203,172,249,0.14),transparent_45%)]" />
                 <div className="pointer-events-none absolute inset-0 ring-1 ring-[rgba(203,172,249,0.20)]" />
                 <Image
-                  src="/me.png"
+                  src={`${basePath}/me.png`}
                   alt="Abdallah Sultan"
                   fill
                   priority
@@ -99,4 +101,3 @@ export function Hero() {
     </section>
   );
 }
-
